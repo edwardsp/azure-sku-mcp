@@ -1,5 +1,7 @@
+import os
+
 from fastmcp import FastMCP
-from azure.identity import DefaultAzureCredential
+from azure.identity import AzureCliCredential
 from azure.mgmt.subscription import SubscriptionClient
 from azure.mgmt.compute import ComputeManagementClient
 
@@ -7,7 +9,7 @@ mcp = FastMCP("AzureSKUExplorer")
 
 def get_default_subscription():
     """Helper to pick the first active subscription from credentials."""
-    credential = DefaultAzureCredential()
+    credential = AzureCliCredential(tenant_id=os.getenv("AZURE_TENANT_ID"), subscription=os.getenv("AZURE_SUBSCRIPTION_ID"))
     sub_client = SubscriptionClient(credential)
     subs = list(sub_client.subscriptions.list())
     if not subs:
@@ -27,7 +29,7 @@ def search_azure_skus(location: str = "eastus", filter_str: str = ""):
         language.
     """
     try:
-        credential = DefaultAzureCredential()
+        credential = AzureCliCredential(tenant_id=os.getenv("AZURE_TENANT_ID"), subscription=os.getenv("AZURE_SUBSCRIPTION_ID"))
         sub_id = get_default_subscription()
         compute_client = ComputeManagementClient(credential, sub_id)
 

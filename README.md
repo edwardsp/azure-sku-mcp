@@ -28,19 +28,17 @@ pip install fastmcp azure-identity azure-mgmt-subscription azure-mgmt-compute
 
 ## Authenticate to Azure
 
-The server uses `DefaultAzureCredential`, which tries credentials in this order:
-
-1. Environment variables (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_CLIENT_SECRET`)
-2. Workload identity
-3. Managed identity
-4. Azure CLI (`az login`)
-5. Azure Developer CLI (`azd auth login`)
-
-The simplest way for local development:
+The server uses `AzureCliCredential` for authentication. You must be logged in via the Azure CLI:
 
 ```bash
-az login
+az login --tenant <tenant-id>
+# Optionally set your default subscription
+az account set --subscription <subscription-id>
 ```
+
+**Important**: The server queries the Azure Resource SKUs API, which requires:
+- **Azure Subscription ID** (`AZURE_SUBSCRIPTION_ID` environment variable)
+- **Azure Tenant ID** (`AZURE_TENANT_ID` environment variable)
 
 ## Running the server
 
@@ -108,17 +106,24 @@ Standard_NC24ads_A100_v4       vCPUs= 24  Mem=  220 GB
 
 ```jsonc
 {
-    "servers": {
-        "azure-sku-explorer": {
-            "command": "/absolute/path/to/azure-sku-mcp/.venv/bin/python",
-            "args": ["/absolute/path/to/azure-sku-mcp/server.py"],
-            "env": {}
+    "mcp": {
+        "servers": {
+            "azure-sku-explorer": {
+                "command": "/absolute/path/to/azure-sku-mcp/.venv/bin/python",
+                "args": ["/absolute/path/to/azure-sku-mcp/server.py"],
+                "env": {
+                    // Required: Your Azure subscription ID
+                    "AZURE_SUBSCRIPTION_ID": "your-subscription-id-here",
+                    // Required: Your Azure tenant ID
+                    "AZURE_TENANT_ID": "your-tenant-id-here"
+                }
+            }
         }
     }
 }
 ```
 
-Replace `/absolute/path/to/` with the actual path (e.g., `/home/paul/Microsoft/HandsOnLab/`).
+Replace `/absolute/path/to/` with the actual path (e.g., `/home/paul/Microsoft/`) and set your `AZURE_SUBSCRIPTION_ID`.
 
 2. Reload VS Code (`Ctrl+Shift+P` → "Developer: Reload Window")
 
