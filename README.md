@@ -104,27 +104,23 @@ Standard_NC24ads_A100_v4       vCPUs= 24  Mem=  220 GB
 
 ## Adding to GitHub Copilot (VS Code)
 
-1. Open VS Code settings JSON (`Ctrl+Shift+P` → "Preferences: Open User Settings (JSON)")
-
-2. Add the server to `mcp.servers`:
+1. Create a `.vscode/mcp.json` file in the project root:
 
 ```jsonc
 {
-    "mcp": {
-        "servers": {
-            "azure-sku-explorer": {
-                "command": "/absolute/path/to/azure-sku-mcp/.venv/bin/python",
-                "args": ["/absolute/path/to/azure-sku-mcp/server.py"],
-                "env": {}
-            }
+    "servers": {
+        "azure-sku-explorer": {
+            "command": "/absolute/path/to/azure-sku-mcp/.venv/bin/python",
+            "args": ["/absolute/path/to/azure-sku-mcp/server.py"],
+            "env": {}
         }
     }
 }
 ```
 
-Replace `/absolute/path/to/` with the actual path (e.g., `/home/paul/Microsoft/`).
+Replace `/absolute/path/to/` with the actual path (e.g., `/home/paul/Microsoft/HandsOnLab/`).
 
-3. Reload VS Code (`Ctrl+Shift+P` → "Developer: Reload Window")
+2. Reload VS Code (`Ctrl+Shift+P` → "Developer: Reload Window")
 
 4. In Copilot Chat (Agent mode), ask something like:
 

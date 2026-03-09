@@ -20,7 +20,11 @@ def search_azure_skus(location: str = "eastus", filter_str: str = ""):
     Lists all Azure Compute SKUs and their capabilities, filtered by a string.
     
     :param location: The Azure region (e.g., 'eastus', 'westeurope').
-    :param filter_str: Search term (e.g., 'v5', 'Gpus', 'Premium'). Case-insensitive.
+    :param filter_str: A single substring matched case-insensitively against the
+        SKU name, family, and all capability keys and values. Spaces are literal
+        (not treated as separate terms). Examples: 'Standard_NC' to match NC-series
+        SKUs by name, 'Gpus' to match SKUs with a GPU capability, 'v5' to match
+        v5-generation SKUs.
     """
     try:
         credential = DefaultAzureCredential()
