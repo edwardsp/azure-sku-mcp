@@ -16,6 +16,12 @@ python3 --version
 az account show
 ```
 
+> **Important:** Confirm that the output shows a **non-production subscription**. If not, switch to the correct subscription:
+>
+> ```bash
+> az account set --subscription "<your-non-production-subscription-name-or-id>"
+> ```
+
 ```bash
 git --version
 ```
@@ -117,7 +123,10 @@ In VS Code, create a new file `.vscode/mcp.json` and enter the following:
             "command": "<your-repo-path>/.venv/bin/python",      // macOS/Linux
             "command": "<your-repo-path>\\.venv\\Scripts\\python.exe", // Windows
             "args": ["<your-repo-path>/server.py"],
-            "env": {}
+            "env": {
+                "AZURE_TENANT_ID": "<your-tenant-id>",
+                "AZURE_SUBSCRIPTION_ID": "<your-subscription-id>"
+            }
         }
     }
 }
@@ -131,7 +140,10 @@ In VS Code, create a new file `.vscode/mcp.json` and enter the following:
 >         "azure-sku-explorer": {
 >             "command": "/home/paul/Microsoft/HandsOnLab/azure-sku-mcp/.venv/bin/python",
 >             "args": ["/home/paul/Microsoft/HandsOnLab/azure-sku-mcp/server.py"],
->             "env": {}
+>             "env": {
+>                 "AZURE_TENANT_ID": "<your-tenant-id>",
+>                 "AZURE_SUBSCRIPTION_ID": "<your-subscription-id>"
+>             }
 >         }
 >     }
 > }
@@ -145,13 +157,36 @@ In VS Code, create a new file `.vscode/mcp.json` and enter the following:
 >         "azure-sku-explorer": {
 >             "command": "C:\\Users\\paul\\Microsoft\\HandsOnLab\\azure-sku-mcp\\.venv\\Scripts\\python.exe",
 >             "args": ["C:\\Users\\paul\\Microsoft\\HandsOnLab\\azure-sku-mcp\\server.py"],
->             "env": {}
+>             "env": {
+>                 "AZURE_TENANT_ID": "<your-tenant-id>",
+>                 "AZURE_SUBSCRIPTION_ID": "<your-subscription-id>"
+>             }
 >         }
 >     }
 > }
 > ```
 
-Three things to note: `command` points to the Python *inside your virtual environment* so it has all the packages. `args` is the path to `server.py`. And `env` lets you pass environment variables if needed — you don't need any here because `az login` handles auth. This configuration stays with the project — no need to edit your global settings.
+Three things to note: `command` points to the Python *inside your virtual environment* so it has all the packages. `args` is the path to `server.py`. And `env` lets you pass environment variables for Azure authentication.
+
+> **TIP:** Get your tenant and subscription IDs from the `az account show` command you ran earlier. Look for the `tenantId` and `id` fields in the output:
+>
+> ```json
+> {
+>   "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",        // ← AZURE_SUBSCRIPTION_ID
+>   "tenantId": "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"  // ← AZURE_TENANT_ID
+> }
+> ```
+>
+> Add these to the `env` section of your `mcp.json`:
+>
+> ```jsonc
+> "env": {
+>     "AZURE_TENANT_ID": "<your-tenant-id>",
+>     "AZURE_SUBSCRIPTION_ID": "<your-subscription-id>"
+> }
+> ```
+
+This configuration stays with the project — no need to edit your global settings.
 
 **Save the file**, then press `Ctrl+Shift+P` → **"Developer: Reload Window"**.
 
