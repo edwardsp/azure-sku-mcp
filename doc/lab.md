@@ -37,7 +37,8 @@ You don't *have* to use a virtual environment, but it's good practice — it kee
 
 ```bash
 python3 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate   # macOS/Linux
+.venv\Scripts\activate      # Windows
 pip install -r requirements.txt
 ```
 
@@ -107,13 +108,14 @@ mkdir .vscode
 
 In VS Code, create a new file `.vscode/mcp.json` and enter the following:
 
-> **TIP:** Get your repo path by running `pwd` in the terminal — use that to replace the paths below.
+> **TIP:** Get your repo path by running `pwd` (macOS/Linux/PowerShell) or `cd` (Windows cmd) in the terminal — use that to replace the paths below.
 
 ```jsonc
 {
     "servers": {
         "azure-sku-explorer": {
-            "command": "<your-repo-path>/.venv/bin/python",
+            "command": "<your-repo-path>/.venv/bin/python",      // macOS/Linux
+            "command": "<your-repo-path>\\.venv\\Scripts\\python.exe", // Windows
             "args": ["<your-repo-path>/server.py"],
             "env": {}
         }
@@ -121,7 +123,7 @@ In VS Code, create a new file `.vscode/mcp.json` and enter the following:
 }
 ```
 
-> For example, if `pwd` shows `/home/paul/Microsoft/HandsOnLab/azure-sku-mcp`:
+> **macOS/Linux example** — if `pwd` shows `/home/paul/Microsoft/HandsOnLab/azure-sku-mcp`:
 >
 > ```jsonc
 > {
@@ -129,6 +131,20 @@ In VS Code, create a new file `.vscode/mcp.json` and enter the following:
 >         "azure-sku-explorer": {
 >             "command": "/home/paul/Microsoft/HandsOnLab/azure-sku-mcp/.venv/bin/python",
 >             "args": ["/home/paul/Microsoft/HandsOnLab/azure-sku-mcp/server.py"],
+>             "env": {}
+>         }
+>     }
+> }
+> ```
+>
+> **Windows example** — if `pwd` shows `C:\Users\paul\Microsoft\HandsOnLab\azure-sku-mcp`:
+>
+> ```jsonc
+> {
+>     "servers": {
+>         "azure-sku-explorer": {
+>             "command": "C:\\Users\\paul\\Microsoft\\HandsOnLab\\azure-sku-mcp\\.venv\\Scripts\\python.exe",
+>             "args": ["C:\\Users\\paul\\Microsoft\\HandsOnLab\\azure-sku-mcp\\server.py"],
 >             "env": {}
 >         }
 >     }
